@@ -1,0 +1,42 @@
+pipeline {
+    options { disableConcurrentBuilds() }
+    agent { label 'automation-mobile'}
+    stages {
+        stage('Checkout Code From Git') {
+            retry(3) {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/titanzx/automation-minimal-todo.git']]])
+            }
+        }
+    }
+    stages {
+        stage('Run Test Automate') {
+            sh '~/Library/Android/sdk/emulator/emulator -avd Automate01 -no-snapshot-save > /dev/null 2>&1 &'
+            sh 'sleep 5'
+            sh 'appium > /dev/null 2>&1 &'
+            sh 'sleep 3'
+            sh 'robot -d Log ./testcase/e2e.robot'
+        }
+    }
+    post { 
+        always { 
+            sh 'adb -s emulator-5554 emu kill'
+            sh 'sleep 5'
+            sh 'kill -9 $(ps -ef | grep "crashpad_handler" | grep -v grep | awk '{print $2}')'
+        }
+    }
+    stages {
+        stage('Send Result To Jenkins') {
+            step([
+                $class              : 'RobotPublisher',
+                outputPath          : 'Log',
+                outputFileName      : "**/output.xml",
+                reportFileName      : '**/report.html',
+                logFileName         : '**/log.html',
+                disableArchiveOutput: false,
+                passThreshold       : 100,
+                unstableThreshold   : 95,
+                otherFiles          : "**/*.png,**/*.jpg",
+            ])
+        } 
+    }
+}

@@ -1,0 +1,4 @@
+globalTimeout:     10s
+retryTime:         120x
+retryTimeout:      0.5s
+scriptSpeed:       0

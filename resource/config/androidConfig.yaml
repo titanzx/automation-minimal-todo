@@ -1,0 +1,8 @@
+remoteUrl:         http://127.0.0.1:4723
+automationName:    uiautomator2
+platformName:      Android
+platformVersion:   '12'
+deviceName:        emulator-5554
+udid:              emulator-5554
+autoAcceptAlerts:  true
+fullReset:         true
