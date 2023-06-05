@@ -1,4 +1,4 @@
-# Robot Framework Web Automation
+# Robot Framework Mobile Automation
 
 ## How to setup
 - Create android emulator name Automate01 with resizeable template
