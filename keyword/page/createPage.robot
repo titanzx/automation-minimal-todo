@@ -192,7 +192,7 @@ Tap AM/PM
     [Arguments]    ${dateTime}
     ${dateTime}         Convert Date                     ${dateTime}                    result_format=%p
     ${elementStatus}    Run Keyword And Return Status    Element Should Contain Text    ${create.lblAMPM}    ${dateTime}
-    IF    '${elementStatus}' == 'False'
+    IF    ${elementStatus} == 'False'
         Tap Element When Ready    ${create.lblAMPM}
     END
     Element Should Contain Text      ${create.lblAMPM}    ${dateTime}
